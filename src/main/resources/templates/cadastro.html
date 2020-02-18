@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header :: common_header(~{::title},~{::link})">
+
+    <title>Cadastro</title>
+    <link/>
+
+</head>
+<body th:replace="layout/body :: common_body(~{::conteudo},~{::script})">
+<div class="container" th:fragment="conteudo">
+    <div class="alert alert-info" th:if="${type!=null && type.equals('info')}" th:text="${message}"></div>
+    <div class="alert alert-error" th:if="${type!=null && type.equals('error')}" th:text="${message}"></div>
+    <form id="cadastro-form" action="#" method="post" th:action="@{/public/cadastro/postCadastro}">
+        <div class="form-group">
+            <label> Usuario : </label>
+            <input class="form-control" autocomplete="off" type="text" name="usuario"/>
+        </div>
+        <div class="form-group">
+            <label> Nome : </label>
+            <input class="form-control" autocomplete="off" type="text" name="nome"/>
+        </div>
+        <div class="form-group">
+            <label> Senha: </label>
+            <input class="form-control" autocomplete="off" type="password" name="senha"/>
+        </div>
+        <div class="form-group">
+            <label> Confirmar Senha: </label>
+            <input class="form-control"  autocomplete="off" type="password" name="senha2"/>
+        </div>
+        <div class="float-lg-right">
+            <input type="submit" class="btn btn-primary" value="Sign In"/>
+        </div>
+    </form>
+
+</div>
+<script type="text/javascript">
+    $( '#cadastro-form' ).each(function(){
+        this.reset();
+    });
+    document.getElementById("cadastro-form").setAttribute("autocomplete", "off");
+    document.getElementById("cadastro-form").setAttribute("autocomplete", "off");
+</script>
+
+
+</body>
+</html>

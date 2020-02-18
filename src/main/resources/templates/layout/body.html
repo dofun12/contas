@@ -1,0 +1,7 @@
+<body xmlns:th="http://www.thymeleaf.org" th:fragment="common_body(body,scripts)">
+    <th:block th:replace="${body}" />
+
+    <script type="text/javascript" th:src="@{/static/libs/jquery/jquery-3.4.1.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/libs/bootstrap-4.4.1-dist/js/bootstrap.min.js}"></script>
+    <th:block th:replace="${scripts}" />
+</body>

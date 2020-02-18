@@ -1,0 +1,11 @@
+<head xmlns:th="http://www.thymeleaf.org" th:fragment="common_header(title,links)">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title th:replace="${title}">The awesome application</title>
+
+    <!-- Common styles and scripts -->
+    <link rel="stylesheet" type="text/css" th:href="@{/static/libs/bootstrap-4.4.1-dist/css/bootstrap.css}">
+    <!--/* Per-page placeholder for additional links */-->
+    <th:block th:replace="${links}"/>
+</head>
