@@ -10,6 +10,7 @@ public class Conta {
     private Integer dia;
     private Double total;
     private Boolean pago;
+    private String descricao;
 
     public Conta() {
     }
@@ -22,6 +23,7 @@ public class Conta {
         this.dia = (Integer) map.get("dia");
         this.total = (Double) map.get("total");
         this.pago = (map.get("pago")!=null && ((Integer) map.get("pago")>0));
+        this.descricao = (String)map.get("descricao");
     }
 
     public Conta(String usuario, String lancamento, Integer mes, Integer ano, Integer dia, Double total, Boolean pago) {
@@ -88,5 +90,13 @@ public class Conta {
 
     public void setPago(Boolean pago) {
         this.pago = pago;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 }

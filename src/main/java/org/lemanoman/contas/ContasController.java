@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -57,14 +58,30 @@ public class ContasController {
     @GetMapping("/contas/editar/{lancamento}/{ano}/{mes}/{dia}")
     public String editarConta(
             @PathVariable("lancamento") String lancamento,
-            @PathVariable("ano") String ano,
-            @PathVariable("mes") String mes,
-            @PathVariable("dia") String dia, Model model){
+            @PathVariable("ano") Integer ano,
+            @PathVariable("mes") Integer mes,
+            @PathVariable("dia") Integer dia,
+            Model model,
+            Principal principal){
+        Conta conta = databaseService.getConta(principal.getName(),lancamento,ano,mes,dia);
         FormNovaConta formNovaConta = new FormNovaConta();
-        formNovaConta.setData(simpleDateFormat.format(new Date()));
-        formNovaConta.setPago(true);
-        model.addAttribute("post",formNovaConta);
-        return "/contas/editar";
+        if(conta!=null){
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.DAY_OF_MONTH,dia);
+            calendar.set(Calendar.MONTH,mes+1);
+            calendar.set(Calendar.YEAR, ano);
+            formNovaConta.setLancamento(conta.getLancamento());
+            formNovaConta.setDescricao(conta.getDescricao());
+            formNovaConta.setPago(conta.getPago());
+            formNovaConta.setTotal(conta.getTotal());
+            formNovaConta.setData(simpleDateFormat.format(calendar.getTime()));
+            formNovaConta.setPago(true);
+            model.addAttribute("post",formNovaConta);
+            return "/contas/editar";
+        }else{
+            return "";
+        }
+
     }
 
     @PostMapping("/contas/nova")

@@ -63,6 +63,32 @@ public class DatabaseService {
         return  listConta;
     }
 
+    public Conta getConta(String usuario,String lancamento,Integer ano,Integer mes,Integer dia){
+        List<Conta> listConta = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+
+        Database database = new Database(dataBaseLocation);
+        List<Map<String,Object>> list = database.doSelect(
+                "select * from conta \n" +
+                        " where " +
+                        " usuario = '"+usuario+"' \n" +
+                        " and ano = "+ano+" \n" +
+                        " and mes = "+mes+" \n" +
+                        " and dia = "+dia+" \n" +
+                        " and lancamento = '"+lancamento+"'");
+        if(list!=null && list.size()>0){
+            for(Map<String,Object> map: list){
+                listConta.add(new Conta(map));
+            }
+        }
+        database.close();
+        if(listConta.size()>0){
+            return listConta.get(0);
+        }else{
+            return null;
+        }
+    }
+
     public boolean createUser(String usuario,String nome,String senha){
         Database database = new Database(dataBaseLocation);
         try {
