@@ -11,6 +11,8 @@ Crud com Login SpringBoot (Security + MVC ) + Thymeleaf + SQLite JQuery e Bootst
 
 ### Ou clique 2x no jar ;)
 
+### Após rodar, acesse:
+ [http://localhost:8095](http://localhost:8095)
 
 O banco de dados será criado automáticamente.
 
