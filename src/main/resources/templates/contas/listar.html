@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout/header :: common_header(~{::title},~{::link})">
+
+    <title>Listar Contas</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/css/hello.css}">
+    <link/>
+
+</head>
+<body th:replace="/layout/body :: common_body(~{::conteudo},~{::script})">
+<div th:replace="/layout/menu"></div>
+<div th:fragment="conteudo">
+    <div th:replace="/layout/menu"/>
+
+    <div class="container">
+        <h1>Listar contas</h1>
+        <div class="tabela">
+            <div class="row" style="border-bottom: 1px solid #eee;font-weight: bold;">
+                <div class="col tabela-header">Lancamento</div>
+                <div class="col tabela-header">Total</div>
+                <div class="col tabela-header">Dia</div>
+                <div class="col tabela-header">Pago</div>
+            </div>
+
+            <th:block th:each="conta : ${contas}">
+                <div class="row">
+                    <div class="col tabela-coluna"><!--/*@thymesVar id="conta" type="org.lemanoman.contas.Conta"*/-->
+                    <span th:text="${conta.lancamento}"></span></div>
+                    <div class="col tabela-coluna"><span th:text="${conta.total}"></span></div>
+                    <div class="col tabela-coluna"><span th:text="${conta.dia}"></span></div>
+                    <div class="col tabela-coluna"><span th:text="${conta.pago}"></span></div>
+                </div>
+            </th:block>
+
+            <div class="row">
+                <div class="col">
+                    <span style="font-weight: bold;">Total: <span th:text="${total}"></span></span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script/>
+
+
+</body>
+</html>

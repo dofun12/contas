@@ -25,6 +25,7 @@ public class Database {
 
 
     public List<Map<String, Object>> doSelect(String query){
+        System.out.println("Doing select: "+query);
         List<Map<String, Object>> list = new ArrayList<>();
         try {
 
@@ -50,6 +51,7 @@ public class Database {
 
     public long doUpdate(String query){
         try {
+            System.out.println("Doing query: "+query);
             Statement statement = getConnection().createStatement();
             long updated = statement.executeUpdate(query);
             statement.close();

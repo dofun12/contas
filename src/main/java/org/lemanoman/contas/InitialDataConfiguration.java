@@ -15,7 +15,7 @@ public class InitialDataConfiguration {
 
     @PostConstruct
     public void postConstruct() {
-        databaseService.resetDatabase();
+        databaseService.resetDatabase(false);
     }
 
 

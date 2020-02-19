@@ -32,7 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.formLogin()
 				.loginPage("/login")
 				//.successHandler(successHandler())
-				.defaultSuccessUrl("/hello", true)
+				.defaultSuccessUrl("/contas/listar", true)
 				.permitAll()
 				.and()
 			.logout()
