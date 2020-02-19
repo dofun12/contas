@@ -1,14 +1,14 @@
-# contas - APlicação para controlar contas pagas no mês ( bem simples)
+# contas - Aplicação para controlar contas pagas no mês ( bem simples)
 Crud com Login SpringBoot (Security + MVC ) + Thymeleaf + SQLite
 
 
-## Para construir
-mvn clean install package
+### Para construir
+<code>mvn clean install package</code>
 
-## Para rodar
-java -jar target/contas.jar 
+### Para rodar
+<code>java -jar target/contas.jar</code>
 
-## Ou clique 2x no jar ;)
+### Ou clique 2x no jar ;)
 
 
 O banco de dados será criado automáticamente.
