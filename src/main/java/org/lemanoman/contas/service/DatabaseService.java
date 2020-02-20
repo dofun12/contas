@@ -20,9 +20,9 @@ public class DatabaseService {
     @Value("${database.forceRestore}")
     private Boolean forceRestore;
 
-    public void resetDatabase(boolean forceReset){
+    public void resetDatabase(boolean forceReset) {
         File db = new File(dataBaseLocation);
-        if(!db.exists()|| forceReset || forceRestore){
+        if (!db.exists() || forceReset || forceRestore) {
             Database database = new Database(dataBaseLocation);
             database.dropAndCreate();
             database.close();
@@ -30,13 +30,13 @@ public class DatabaseService {
     }
 
 
-    public UserModel getUsuario(String usuario){
+    public UserModel getUsuario(String usuario) {
         UserModel userModel = new UserModel();
         Database database = new Database(dataBaseLocation);
-        List<Map<String,Object>> list = database.doSelect("select usuario,nome,senha,dataCriado from usuarios where usuario = '"+usuario+"'");
-        if(list!=null && list.size()>0){
-            Map<String,Object> map = list.get(0);
-            userModel =  new UserModel(
+        List<Map<String, Object>> list = database.doSelect("select usuario,nome,senha,dataCriado from usuarios where usuario = '" + usuario + "'");
+        if (list != null && list.size() > 0) {
+            Map<String, Object> map = list.get(0);
+            userModel = new UserModel(
                     (String) map.get("usuario"),
                     (String) map.get("senha"),
                     (String) map.get("nome"),
@@ -44,120 +44,140 @@ public class DatabaseService {
             );
         }
         database.close();
-        return  userModel;
+        return userModel;
     }
 
-    public List<Conta> getListContasMesAtual(String usuario){
+    public List<Conta> getListContasMesAtual(String usuario) {
         List<Conta> listConta = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
 
         Database database = new Database(dataBaseLocation);
-        List<Map<String,Object>> list = database.doSelect(
+        List<Map<String, Object>> list = database.doSelect(
                 "select * from conta \n" +
                         " where " +
-                        " usuario = '"+usuario+"' \n" +
-                        " and mes = "+(calendar.get(Calendar.MONTH)+1)+" and ano = "+calendar.get(Calendar.YEAR));
-        if(list!=null && list.size()>0){
-            for(Map<String,Object> map: list){
+                        " usuario = '" + usuario + "' \n" +
+                        " and mes = " + (calendar.get(Calendar.MONTH) + 1) + " and ano = " + calendar.get(Calendar.YEAR));
+        if (list != null && list.size() > 0) {
+            for (Map<String, Object> map : list) {
                 listConta.add(new Conta(map));
             }
 
         }
         database.close();
-        return  listConta;
+        return listConta;
     }
 
-    public List<Conta> getListContas(String usuario, Integer ano, Integer mes){
+    public List<Conta> getListContas(String usuario, Integer ano, Integer mes) {
         List<Conta> listConta = new ArrayList<>();
         Database database = new Database(dataBaseLocation);
-        List<Map<String,Object>> list = database.doSelect(
+        List<Map<String, Object>> list = database.doSelect(
                 "select * from conta \n" +
                         " where " +
-                        " usuario = '"+usuario+"' \n" +
-                        " and mes = "+mes+" and ano = "+ano);
-        if(list!=null && list.size()>0){
-            for(Map<String,Object> map: list){
+                        " usuario = '" + usuario + "' \n" +
+                        " and mes = " + mes + " and ano = " + ano);
+        if (list != null && list.size() > 0) {
+            for (Map<String, Object> map : list) {
                 listConta.add(new Conta(map));
             }
 
         }
         database.close();
-        return  listConta;
+        return listConta;
     }
 
-    public Conta getConta(String usuario,String lancamento,Integer ano,Integer mes){
+    public Conta getConta(String usuario, String lancamento, Integer ano, Integer mes) {
         List<Conta> listConta = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
 
         Database database = new Database(dataBaseLocation);
-        List<Map<String,Object>> list = database.doSelect(
+        List<Map<String, Object>> list = database.doSelect(
                 "select * from conta \n" +
                         " where " +
-                        " usuario = '"+usuario+"' \n" +
-                        " and ano = "+ano+" \n" +
-                        " and mes = "+mes+" \n" +
-                        " and lancamento = '"+lancamento+"'");
-        if(list!=null && list.size()>0){
-            for(Map<String,Object> map: list){
+                        " usuario = '" + usuario + "' \n" +
+                        " and ano = " + ano + " \n" +
+                        " and mes = " + mes + " \n" +
+                        " and lancamento = '" + lancamento + "'");
+        if (list != null && list.size() > 0) {
+            for (Map<String, Object> map : list) {
                 listConta.add(new Conta(map));
             }
         }
         database.close();
-        if(listConta.size()>0){
+        if (listConta.size() > 0) {
             return listConta.get(0);
-        }else{
+        } else {
             return null;
         }
     }
 
-    public boolean createUser(String usuario,String nome,String senha){
+    public boolean createUser(String usuario, String nome, String senha) {
         Database database = new Database(dataBaseLocation);
         try {
-            database.doUpdate("insert into usuarios(usuario,nome,senha,dataCriado) values ('"+usuario+"','"+nome+"','"+senha+"',DATETIME('now'))");
+            database.doUpdate("insert into usuarios(usuario,nome,senha,dataCriado) values ('" + usuario + "','" + nome + "','" + senha + "',DATETIME('now'))");
             database.close();
             return true;
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             database.close();
             return false;
         }
     }
 
-    public boolean addConta(String lancamento,String descricao,String usuario,Double total, Date date, Boolean pago){
+    public boolean addConta(String lancamento, String descricao, String usuario, Double total, Date date, Boolean pago) {
         TimePeriod tp = TimeUtils.toTimePeriod(date);
 
 
         Database database = new Database(dataBaseLocation);
         try {
             database.doUpdate("insert into conta (usuario, lancamento, descricao, ano, mes, dia, total, pago)\n" +
-                    "values ('"+usuario+"','"+lancamento+"','"+descricao+"',"+tp.getAno()+","+tp.getMes()+","+tp.getDia()+","+total+","+pago+");");
+                    "values ('" + usuario + "','" + lancamento + "','" + descricao + "'," + tp.getAno() + "," + tp.getMes() + "," + tp.getDia() + "," + total + "," + pago + ");");
             database.close();
             return true;
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             database.close();
             return false;
         }
     }
 
-    public boolean editarConta(String lancamento,String descricao,String usuario,Double total, Date date, Boolean pago){
+    public boolean deleteConta(String lancamento, String usuario, int ano, int mes,int dia) {
+        Database database = new Database(dataBaseLocation);
+        try {
+            database.doPreparedUpdate("delete from conta where ano = ? and mes =? and dia=? and lancamento = ? and usuario =?",
+                    ano,
+                    mes,
+                    dia,
+                    lancamento,
+                    usuario
+            );
+            database.close();
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            database.close();
+
+        }
+        return false;
+    }
+
+    public boolean editarConta(String lancamento, String descricao, String usuario, Double total, Date date, Boolean pago) {
         TimePeriod tp = TimeUtils.toTimePeriod(date);
-        if(tp!=null){
+        if (tp != null) {
             Database database = new Database(dataBaseLocation);
             try {
                 database.doPreparedUpdate("update conta set total=?, dia= ?, descricao=?, pago=? where ano = ? and mes =? and lancamento = ? and usuario =?",
-                    total,
-                    tp.getDia(),
-                    descricao,
-                    pago==null?false:pago,
-                    tp.getAno(),
-                    tp.getMes(),
-                    lancamento,
-                    usuario
+                        total,
+                        tp.getDia(),
+                        descricao,
+                        pago == null ? false : pago,
+                        tp.getAno(),
+                        tp.getMes(),
+                        lancamento,
+                        usuario
                 );
                 database.close();
                 return true;
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 ex.printStackTrace();
                 database.close();
 

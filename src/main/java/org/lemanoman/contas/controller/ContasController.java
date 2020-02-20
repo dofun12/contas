@@ -34,12 +34,14 @@ public class ContasController {
 
     @GetMapping("/contas/listar")
     public String listar(Model model, Principal principal) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!(auth instanceof AnonymousAuthenticationToken)) {
-            UserDetails userDetails = (UserDetails) auth.getPrincipal();
-        }
+        return listar(model,principal, null);
+    }
+
+    private String listar(Model model, Principal principal,List<Conta> contas){
         UserModel userModel = databaseService.getUsuario(principal.getName());
-        List<Conta> contas = databaseService.getListContasMesAtual(principal.getName());
+        if(contas==null){
+            contas = databaseService.getListContasMesAtual(principal.getName());
+        }
         Double total = 0d;
         for (Conta conta : contas) {
             total = total + conta.getTotal();
@@ -54,16 +56,8 @@ public class ContasController {
     public String listar(
             @PathVariable("ano") Integer ano,
             @PathVariable("mes") Integer mes,Model model, Principal principal) {
-        UserModel userModel = databaseService.getUsuario(principal.getName());
         List<Conta> contas = databaseService.getListContas(principal.getName(),ano,mes);
-        Double total = 0d;
-        for (Conta conta : contas) {
-            total = total + conta.getTotal();
-        }
-        model.addAttribute("contas", contas);
-        model.addAttribute("total", total);
-        model.addAttribute("name", userModel.getNome());
-        return "/contas/listar";
+        return listar(model,principal,contas);
     }
 
     @GetMapping("/contas/nova")
@@ -110,6 +104,20 @@ public class ContasController {
         } else {
             return "";
         }
+    }
+
+
+    @GetMapping("/contas/deletar/{lancamento}/{ano}/{mes}/{dia}")
+    public String deletar(
+            @PathVariable("lancamento") String lancamento,
+            @PathVariable("ano") Integer ano,
+            @PathVariable("mes") Integer mes,
+            @PathVariable("dia") Integer dia,
+            Model model,
+            Principal principal) {
+        databaseService.deleteConta(lancamento,principal.getName(),ano,mes,dia);
+        List<Conta> contas = databaseService.getListContas(principal.getName(),ano,mes);
+        return listar(model,principal, contas);
     }
 
     @GetMapping("/contas/editar/{lancamento}/{ano}/{mes}/{dia}")

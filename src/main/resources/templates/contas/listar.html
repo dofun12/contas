@@ -36,7 +36,10 @@
                     <!--/*@thymesVar id="conta" type="org.lemanoman.contas.dto.Conta"*/-->
                     <div class="col tabela-coluna"><span th:text="${conta.pago}"></span></div>
                     <!--/*@thymesVar id="conta" type="org.lemanoman.contas.dto.Conta"*/-->
-                    <div class="col tabela-coluna"><a th:href="${'/contas/editar/'+conta.getLancamento()+'/'+conta.getAno()+'/'+conta.getMes()+'/'+conta.getDia()}">Editar</a> </div>
+                    <div class="col tabela-coluna">
+                        <a th:href="${'/contas/editar/'+conta.getLancamento()+'/'+conta.getAno()+'/'+conta.getMes()+'/'+conta.getDia()}">Editar</a>
+                        <a th:href="${'/contas/deletar/'+conta.getLancamento()+'/'+conta.getAno()+'/'+conta.getMes()+'/'+conta.getDia()}">Deletar</a>
+                    </div>
                 </div>
             </th:block>
 
