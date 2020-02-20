@@ -48,6 +48,33 @@ public class Database {
         return list;
     }
 
+    public Map<String, Object> doSelectGetOne(String query, Object... valores){
+        System.out.println("Doing select: "+query);
+        Map<String, Object> row = new HashMap<>();
+        try {
+            PreparedStatement statement = buildStatement(query,valores);
+            ResultSet rs = statement.executeQuery();
+            row = toMap(rs);
+            rs.close();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return row;
+    }
+
+
+    private Map<String,Object> toMap(ResultSet rs) throws SQLException {
+        Map<String, Object> row = new HashMap<>();
+        if (rs.next()){
+            ResultSetMetaData resultSetMetaData = rs.getMetaData();
+            int maxCols = resultSetMetaData.getColumnCount();
+            for(int c = 1;c<=maxCols;c++){
+                row.put(resultSetMetaData.getColumnName(c),rs.getObject(c));
+            }
+        }
+        return row;
+    }
 
     public long doUpdate(String query){
         try {
@@ -62,30 +89,35 @@ public class Database {
         return 0;
     }
 
+    private PreparedStatement buildStatement(String query, Object...valores) throws SQLException {
+        PreparedStatement  statement = getConnection().prepareStatement(query);
+        int index = 1;
+        for(int i=0;i<valores.length;i++){
+            Object valor = valores[i];
+            if(valor instanceof String){
+                statement.setString(index,(String) valor);
+            }else if(valor instanceof Integer){
+                statement.setInt(index,(Integer)valor);
+            }else if(valor instanceof Double){
+                statement.setDouble(index,(Double)valor);
+            }else if(valor instanceof Long){
+                statement.setLong(index,(Long) valor);
+            }else if(valor instanceof Boolean){
+                statement.setBoolean(index,(Boolean) valor);
+            }else if(valor== null){
+                statement.setString(index,"null");
+            }else {
+                throw new SQLException("Prepared statement invalid Type..."+valor);
+            }
+            index++;
+        }
+        return statement;
+    }
+
     public long doPreparedUpdate(String query, Object...valores) {
         try {
             System.out.println("Doing query: "+query);
-            PreparedStatement  statement = getConnection().prepareStatement(query);
-            int index = 1;
-            for(int i=0;i<valores.length;i++){
-                Object valor = valores[i];
-                if(valor instanceof String){
-                    statement.setString(index,(String) valor);
-                }else if(valor instanceof Integer){
-                    statement.setInt(index,(Integer)valor);
-                }else if(valor instanceof Double){
-                    statement.setDouble(index,(Double)valor);
-                }else if(valor instanceof Long){
-                    statement.setLong(index,(Long) valor);
-                }else if(valor instanceof Boolean){
-                    statement.setBoolean(index,(Boolean) valor);
-                }else if(valor== null){
-                    statement.setString(index,"null");
-                }else {
-                    throw new Exception("Prepared statement invalid Type..."+valor);
-                }
-                index++;
-            }
+            PreparedStatement statement = buildStatement(query,valores);
             long updated = statement.executeUpdate();
             statement.close();
             return updated;

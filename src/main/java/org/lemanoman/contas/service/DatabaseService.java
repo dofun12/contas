@@ -67,7 +67,25 @@ public class DatabaseService {
         return  listConta;
     }
 
-    public Conta getConta(String usuario,String lancamento,Integer ano,Integer mes,Integer dia){
+    public List<Conta> getListContas(String usuario, Integer ano, Integer mes){
+        List<Conta> listConta = new ArrayList<>();
+        Database database = new Database(dataBaseLocation);
+        List<Map<String,Object>> list = database.doSelect(
+                "select * from conta \n" +
+                        " where " +
+                        " usuario = '"+usuario+"' \n" +
+                        " and mes = "+mes+" and ano = "+ano);
+        if(list!=null && list.size()>0){
+            for(Map<String,Object> map: list){
+                listConta.add(new Conta(map));
+            }
+
+        }
+        database.close();
+        return  listConta;
+    }
+
+    public Conta getConta(String usuario,String lancamento,Integer ano,Integer mes){
         List<Conta> listConta = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
 
@@ -78,7 +96,6 @@ public class DatabaseService {
                         " usuario = '"+usuario+"' \n" +
                         " and ano = "+ano+" \n" +
                         " and mes = "+mes+" \n" +
-                        " and dia = "+dia+" \n" +
                         " and lancamento = '"+lancamento+"'");
         if(list!=null && list.size()>0){
             for(Map<String,Object> map: list){

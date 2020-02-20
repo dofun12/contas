@@ -2,3 +2,7 @@
     position: relative;
     top: 10px;
 }
+.form-group input[type=checkbox]{
+    float: right;
+    width: 40px;
+}

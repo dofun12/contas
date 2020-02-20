@@ -8,6 +8,8 @@ public class NovaContaForm {
     private Double total;
     private String data;
     private Boolean pago;
+    private String maxDate;
+    private String MinDate;
 
     public Boolean getEditar() {
         return editar;
@@ -55,5 +57,21 @@ public class NovaContaForm {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public String getMaxDate() {
+        return maxDate;
+    }
+
+    public void setMaxDate(String maxDate) {
+        this.maxDate = maxDate;
+    }
+
+    public String getMinDate() {
+        return MinDate;
+    }
+
+    public void setMinDate(String minDate) {
+        MinDate = minDate;
     }
 }

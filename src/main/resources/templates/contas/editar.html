@@ -12,40 +12,41 @@
 <div th:fragment="conteudo">
 
 
-    <div th:replace="/layout/menu" />
-    <h1>Novo/Editar Conta</h1>
+    <div th:replace="/layout/menu"/>
+
     <div class="alert alert-info" th:if="${type!=null && type.equals('info')}" th:text="${message}"></div>
     <div class="alert alert-error" th:if="${type!=null && type.equals('error')}" th:text="${message}"></div>
-    <div class="container-fluid">
-        <!--/*@thymesVar id="post" type="org.lemanoman.contas.dto.NovaContaForm"*/-->
-        <form id="cadastro-form" th:object="${post}" action="#" method="post" th:action="@{/contas/nova}">
-            <input type="hidden" th:value="${post.editar}" name="editar"/>
-            <div class="form-group">
-                <label> Id Lancamento : </label>
-                <input class="form-control" autocomplete="off" type="text" th:value="${post.lancamento}" name="lancamento" />
-            </div>
-            <div class="form-group">
-                <label> Descricao : </label>
-                <input class="form-control"  autocomplete="off" type="text" th:value="${post.descricao}" name="descricao" />
-            </div>
-            <div class="form-group">
-                <label> Total : </label>
-                <input class="form-control mony" autocomplete="off" type="number" th:value="${post.total}" name="total"/>
-            </div>
-            <div class="form-group">
-                <label> Data: </label>
-                <input class="form-control" type="date" name="data" th:value="${post.data}"/>
-            </div>
-            <div class="form-group">
-                <label> Pago: </label>
-                <input class="form-control" type="checkbox" name="pago" th:checked="${post.pago}"/>
-            </div>
-            <div class="float-lg-right">
-                <input type="submit" class="btn btn-primary" value="Adicionar"/>
-            </div>
-        </form>
-    </div>
-
+    <!--/*@thymesVar id="post" type="org.lemanoman.contas.dto.NovaContaForm"*/-->
+    <form id="cadastro-form" class="container-fluid" th:object="${post}" action="#" method="post"
+          th:action="@{/contas/nova}">
+        <h1 th:text="${post.editar?'Editar Conta':'Nova conta'}"></h1>
+        <input type="hidden" th:value="${post.editar}" name="editar"/>
+        <div class="form-group">
+            <label> Id Lancamento : </label>
+            <input class="form-control" autocomplete="off" type="text" th:value="${post.lancamento}" name="lancamento"/>
+        </div>
+        <div class="form-group">
+            <label> Descricao : </label>
+            <input class="form-control" autocomplete="off" type="text" th:value="${post.descricao}" name="descricao"/>
+        </div>
+        <div class="form-group">
+            <label> Total : </label>
+            <input class="form-control mony" autocomplete="off" type="number" th:value="${post.total}" name="total"/>
+        </div>
+        <div class="form-group">
+            <label> Data: </label>
+            <input class="form-control"  th:min="${post.minDate}" th:max="${post.maxDate}" th:if="${post.editar}" type="date" pattern="yyyy-MM-dd" name="data" th:value="${post.data}"/>
+            <input class="form-control" th:if="${!post.editar}" type="date" pattern="yyyy-MM-dd" name="data" th:value="${post.data}"/>
+        </div>
+        <div class="form-group">
+            <label> Pago: </label>
+            <input class="form-control" type="checkbox" name="pago" th:checked="${post.pago}"/>
+        </div>
+        <div class="row">
+            <div class="col-6"><a class="btn btn-secondary float-left" style="color:white;" th:href="@{/contas/listar}">Voltar</a></div>
+            <div class="col-6"><input type="submit" class="btn btn-primary float-right" value="Salvar"/></div>
+        </div>
+    </form>
 
 
 </div>
@@ -55,12 +56,20 @@
         currency: 'USD',
         minimumFractionDigits: 2
     });
-    $(document).ready(function()
-    {
-        $('.mony').on('keypress',function (event) {
+    $(document).ready(function () {
+        $('.mony').on('keypress', function (event) {
             console.log(this.value);
             formatter.format(this.value);
         })
+
+    });
+
+</script>
+<script th:inline="javascript">
+    $(document).ready(function () {
+        var initialDate = [[${message}]];
+        var finalDate = [[${message}]];
+        $( ".datepicker-restricted" ).datepicker({ dateFormat: 'yyyy-MM-dd',minDate: '2020-02-01', maxDate: '2020-02-31' });
     });
 
 </script>
