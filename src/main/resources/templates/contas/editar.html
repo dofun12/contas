@@ -13,7 +13,7 @@
 
 
     <div th:replace="/layout/menu" />
-    <h1>Nova Conta</h1>
+    <h1>Novo/Editar Conta</h1>
     <div class="alert alert-info" th:if="${type!=null && type.equals('info')}" th:text="${message}"></div>
     <div class="alert alert-error" th:if="${type!=null && type.equals('error')}" th:text="${message}"></div>
     <div class="container-fluid">
@@ -21,7 +21,7 @@
         <form id="cadastro-form" th:object="${post}" action="#" method="post" th:action="@{/contas/nova}">
             <input type="hidden" th:value="${post.editar}" name="editar"/>
             <div class="form-group">
-                <label> Id Lancamento : <span th:text="${post.editar}"></span></label>
+                <label> Id Lancamento : </label>
                 <input class="form-control" autocomplete="off" type="text" th:value="${post.lancamento}" name="lancamento" />
             </div>
             <div class="form-group">
