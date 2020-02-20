@@ -1,6 +1,8 @@
-package org.lemanoman.contas;
+package org.lemanoman.contas.service;
 
 
+import org.lemanoman.contas.dto.UserModel;
+import org.lemanoman.contas.dto.Conta;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

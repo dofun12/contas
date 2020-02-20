@@ -1,4 +1,4 @@
-package org.lemanoman.contas;
+package org.lemanoman.contas.dto;
 
 public class UserModel {
   private String username;

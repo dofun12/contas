@@ -1,7 +1,10 @@
-package org.lemanoman.contas;
+package org.lemanoman.contas.controller;
 
+import org.lemanoman.contas.dto.Conta;
+import org.lemanoman.contas.service.DatabaseService;
+import org.lemanoman.contas.dto.FormNovaConta;
+import org.lemanoman.contas.dto.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,7 +21,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class ContasController {

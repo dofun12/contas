@@ -17,7 +17,7 @@
     <div class="alert alert-info" th:if="${type!=null && type.equals('info')}" th:text="${message}"></div>
     <div class="alert alert-error" th:if="${type!=null && type.equals('error')}" th:text="${message}"></div>
     <div class="container-fluid">
-        <!--/*@thymesVar id="post" type="org.lemanoman.contas.FormNovaConta"*/-->
+        <!--/*@thymesVar id="post" type="org.lemanoman.contas.dto.FormNovaConta"*/-->
         <form id="cadastro-form" th:object="${post}" action="#" method="post" th:action="@{/contas/nova}">
             <div class="form-group">
                 <label> Id Lancamento : </label>

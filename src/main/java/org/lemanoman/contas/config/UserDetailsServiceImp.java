@@ -1,16 +1,13 @@
-package org.lemanoman.contas;
+package org.lemanoman.contas.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.lemanoman.contas.service.DatabaseService;
+import org.lemanoman.contas.dto.UserModel;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Map;
 
 
 public class UserDetailsServiceImp implements UserDetailsService {

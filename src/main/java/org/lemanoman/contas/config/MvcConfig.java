@@ -1,4 +1,4 @@
-package org.lemanoman.contas;
+package org.lemanoman.contas.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;

@@ -24,7 +24,8 @@
 
             <th:block th:each="conta : ${contas}">
                 <div class="row">
-                    <div class="col tabela-coluna"><!--/*@thymesVar id="conta" type="org.lemanoman.contas.Conta"*/-->
+                    <div class="col tabela-coluna">
+                        <!--/*@thymesVar id="conta" type="org.lemanoman.contas.dto.Conta"*/-->
                     <span th:text="${conta.lancamento}"></span></div>
                     <div class="col tabela-coluna"><span th:text="${conta.total}"></span></div>
                     <div class="col tabela-coluna"><span th:text="${conta.dia}"></span></div>
