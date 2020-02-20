@@ -6,9 +6,9 @@ create table usuarios(
     dataCriado text
 );
 
-insert into usuarios(usuario,nome,senha,dataCriado) values ('user','Kevim User','user',DATETIME('now'));
+insert into usuarios(usuario,nome,senha,dataCriado) values ('user','Usuario qualquer','user',DATETIME('now'));
 
-insert into usuarios(usuario,nome,senha,dataCriado) values ('admin','Kevim Such','admin',DATETIME('now'));
+insert into usuarios(usuario,nome,senha,dataCriado) values ('admin','Administrador','admin',DATETIME('now'));
 drop table if exists roles;
 create table roles(
     usuario text,
@@ -29,4 +29,4 @@ create table conta(
     primary key(usuario,lancamento,ano,mes)
 );
 insert into conta (usuario, lancamento, descricao, ano, mes, dia, total, pago)
-values ('user','vo','Pagamento Vo',2020,2,20,750.0,0);
+values ('user','cartao','Pagamento Cartao de Credito',2020,2,20,750.0,0);
