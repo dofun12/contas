@@ -1,7 +1,7 @@
 package org.lemanoman.contas.controller;
 
 import org.lemanoman.contas.service.DatabaseService;
-import org.lemanoman.contas.dto.FormCadastro;
+import org.lemanoman.contas.dto.CadastroForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +20,7 @@ public class CadastroController {
 
     @PostMapping("/postCadastro")
     public String foobarPost(
-            @ModelAttribute("command") FormCadastro command,
+            @ModelAttribute("command") CadastroForm command,
             Model model ) {
             System.out.println(command.getNome());
 

@@ -1,7 +1,7 @@
 package org.lemanoman.contas.dto;
 
 
-public class FormCadastro {
+public class CadastroForm {
     private String usuario;
  
     private String nome;

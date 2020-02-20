@@ -1,8 +1,10 @@
 package org.lemanoman.contas.service;
 
 
+import org.lemanoman.contas.dto.TimePeriod;
 import org.lemanoman.contas.dto.UserModel;
 import org.lemanoman.contas.dto.Conta;
+import org.lemanoman.contas.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -105,13 +107,13 @@ public class DatabaseService {
     }
 
     public boolean addConta(String lancamento,String descricao,String usuario,Double total, Date date, Boolean pago){
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
+        TimePeriod tp = TimeUtils.toTimePeriod(date);
+
 
         Database database = new Database(dataBaseLocation);
         try {
             database.doUpdate("insert into conta (usuario, lancamento, descricao, ano, mes, dia, total, pago)\n" +
-                    "values ('"+usuario+"','"+lancamento+"','"+descricao+"',"+calendar.get(Calendar.YEAR)+","+(calendar.get(Calendar.MONTH)+1)+","+calendar.get(Calendar.DAY_OF_MONTH)+","+total+","+pago+");");
+                    "values ('"+usuario+"','"+lancamento+"','"+descricao+"',"+tp.getAno()+","+tp.getMes()+","+tp.getDia()+","+total+","+pago+");");
             database.close();
             return true;
         }catch (Exception ex){
@@ -119,6 +121,32 @@ public class DatabaseService {
             database.close();
             return false;
         }
+    }
+
+    public boolean editarConta(String lancamento,String descricao,String usuario,Double total, Date date, Boolean pago){
+        TimePeriod tp = TimeUtils.toTimePeriod(date);
+        if(tp!=null){
+            Database database = new Database(dataBaseLocation);
+            try {
+                database.doPreparedUpdate("update conta set total=?, dia= ?, descricao=?, pago=? where ano = ? and mes =? and lancamento = ? and usuario =?",
+                    total,
+                    tp.getDia(),
+                    descricao,
+                    pago==null?false:pago,
+                    tp.getAno(),
+                    tp.getMes(),
+                    lancamento,
+                    usuario
+                );
+                database.close();
+                return true;
+            }catch (Exception ex){
+                ex.printStackTrace();
+                database.close();
+
+            }
+        }
+        return false;
     }
 
 }

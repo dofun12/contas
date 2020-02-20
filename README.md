@@ -1,5 +1,5 @@
-# contas 
-### Aplicação para controlar contas pagas no mês ( bem simples)
+# Contas 
+### Aplicação para controlar contas a pagar, no mês ( bem simples)
 Crud com Login SpringBoot (Security + MVC ) + Thymeleaf + SQLite JQuery e Bootstap para dar aquele ar de profissional.
 
 

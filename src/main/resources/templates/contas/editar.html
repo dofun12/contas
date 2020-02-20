@@ -17,10 +17,11 @@
     <div class="alert alert-info" th:if="${type!=null && type.equals('info')}" th:text="${message}"></div>
     <div class="alert alert-error" th:if="${type!=null && type.equals('error')}" th:text="${message}"></div>
     <div class="container-fluid">
-        <!--/*@thymesVar id="post" type="org.lemanoman.contas.dto.FormNovaConta"*/-->
+        <!--/*@thymesVar id="post" type="org.lemanoman.contas.dto.NovaContaForm"*/-->
         <form id="cadastro-form" th:object="${post}" action="#" method="post" th:action="@{/contas/nova}">
+            <input type="hidden" th:value="${post.editar}" name="editar"/>
             <div class="form-group">
-                <label> Id Lancamento : </label>
+                <label> Id Lancamento : <span th:text="${post.editar}"></span></label>
                 <input class="form-control" autocomplete="off" type="text" th:value="${post.lancamento}" name="lancamento" />
             </div>
             <div class="form-group">

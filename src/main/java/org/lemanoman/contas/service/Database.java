@@ -1,5 +1,6 @@
 package org.lemanoman.contas.service;
 
+
 import org.lemanoman.contas.utils.ArquivoUtils;
 
 import java.io.BufferedReader;
@@ -56,6 +57,39 @@ public class Database {
             statement.close();
             return updated;
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public long doPreparedUpdate(String query, Object...valores) {
+        try {
+            System.out.println("Doing query: "+query);
+            PreparedStatement  statement = getConnection().prepareStatement(query);
+            int index = 1;
+            for(int i=0;i<valores.length;i++){
+                Object valor = valores[i];
+                if(valor instanceof String){
+                    statement.setString(index,(String) valor);
+                }else if(valor instanceof Integer){
+                    statement.setInt(index,(Integer)valor);
+                }else if(valor instanceof Double){
+                    statement.setDouble(index,(Double)valor);
+                }else if(valor instanceof Long){
+                    statement.setLong(index,(Long) valor);
+                }else if(valor instanceof Boolean){
+                    statement.setBoolean(index,(Boolean) valor);
+                }else if(valor== null){
+                    statement.setString(index,"null");
+                }else {
+                    throw new Exception("Prepared statement invalid Type..."+valor);
+                }
+                index++;
+            }
+            long updated = statement.executeUpdate();
+            statement.close();
+            return updated;
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return 0;

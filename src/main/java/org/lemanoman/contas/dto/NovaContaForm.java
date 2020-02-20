@@ -1,12 +1,21 @@
 package org.lemanoman.contas.dto;
 
 
-public class FormNovaConta {
+public class NovaContaForm {
+    private Boolean editar = false;
     private String lancamento;
     private String descricao;
     private Double total;
     private String data;
     private Boolean pago;
+
+    public Boolean getEditar() {
+        return editar;
+    }
+
+    public void setEditar(Boolean editar) {
+        this.editar = editar;
+    }
 
     public String getLancamento() {
         return lancamento;

@@ -1,9 +1,11 @@
 package org.lemanoman.contas.controller;
 
 import org.lemanoman.contas.dto.Conta;
+import org.lemanoman.contas.dto.TimePeriod;
 import org.lemanoman.contas.service.DatabaseService;
-import org.lemanoman.contas.dto.FormNovaConta;
+import org.lemanoman.contas.dto.NovaContaForm;
 import org.lemanoman.contas.dto.UserModel;
+import org.lemanoman.contas.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -50,11 +52,34 @@ public class ContasController {
 
     @GetMapping("/contas/nova")
     public String novaConta(Model model){
-        FormNovaConta formNovaConta = new FormNovaConta();
-        formNovaConta.setData(simpleDateFormat.format(new Date()));
-        formNovaConta.setPago(true);
-        model.addAttribute("post",formNovaConta);
+        NovaContaForm novaContaForm = new NovaContaForm();
+        novaContaForm.setData(simpleDateFormat.format(new Date()));
+        novaContaForm.setEditar(false);
+        novaContaForm.setPago(false);
+        model.addAttribute("post", novaContaForm);
         return "/contas/editar";
+    }
+
+    private String doEdit(String lancamento, Integer ano,Integer mes, Integer dia, Model model, Principal principal){
+        Conta conta = databaseService.getConta(principal.getName(),lancamento,ano,mes,dia);
+        NovaContaForm novaContaForm = new NovaContaForm();
+        if(conta!=null){
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.DAY_OF_MONTH,dia);
+            calendar.set(Calendar.MONTH,mes-1);
+            calendar.set(Calendar.YEAR, ano);
+            novaContaForm.setEditar(true);
+            novaContaForm.setLancamento(conta.getLancamento());
+            novaContaForm.setDescricao(conta.getDescricao());
+            novaContaForm.setPago(conta.getPago());
+            novaContaForm.setTotal(conta.getTotal());
+            novaContaForm.setData(simpleDateFormat.format(calendar.getTime()));
+            novaContaForm.setPago(conta.getPago());
+            model.addAttribute("post", novaContaForm);
+            return "/contas/editar";
+        }else{
+            return "";
+        }
     }
 
     @GetMapping("/contas/editar/{lancamento}/{ano}/{mes}/{dia}")
@@ -65,21 +90,19 @@ public class ContasController {
             @PathVariable("dia") Integer dia,
             Model model,
             Principal principal){
-        Conta conta = databaseService.getConta(principal.getName(),lancamento,ano,mes,dia);
-        FormNovaConta formNovaConta = new FormNovaConta();
-        if(conta!=null){
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.DAY_OF_MONTH,dia);
-            calendar.set(Calendar.MONTH,mes+1);
-            calendar.set(Calendar.YEAR, ano);
-            formNovaConta.setLancamento(conta.getLancamento());
-            formNovaConta.setDescricao(conta.getDescricao());
-            formNovaConta.setPago(conta.getPago());
-            formNovaConta.setTotal(conta.getTotal());
-            formNovaConta.setData(simpleDateFormat.format(calendar.getTime()));
-            formNovaConta.setPago(true);
-            model.addAttribute("post",formNovaConta);
-            return "/contas/editar";
+        return doEdit(lancamento,ano,mes,dia,model,principal);
+    }
+
+    @GetMapping("/contas/editar/{lancamento}/{dateStr}")
+    public String editarContaSimples(
+            @PathVariable("lancamento") String lancamento,
+            @PathVariable("dateStr") String dateStr,
+            Model model,
+            Principal principal){
+
+        TimePeriod tp = TimeUtils.toTimePeriod(dateStr);
+        if(tp!=null){
+            return doEdit(lancamento,tp.getAno(),tp.getMes(),tp.getDia(),model,principal);
         }else{
             return "";
         }
@@ -87,18 +110,30 @@ public class ContasController {
     }
 
     @PostMapping("/contas/nova")
-    public String postNovaConta(@ModelAttribute("command") FormNovaConta command,Model model, Principal principal ){
+    public String postNovaConta(@ModelAttribute("command") NovaContaForm command, Model model, Principal principal ){
         try{
-
-            Date date = simpleDateFormat.parse(command.getData());
-            if(databaseService.addConta(command.getLancamento(),command.getDescricao(),principal.getName(),command.getTotal(),date,command.getPago())){
-                model.addAttribute("type","info");
-                model.addAttribute("message","Salvo com sucesso!");
-                model.addAttribute("post",command);
+            if(command.getEditar()){
+                Date date = simpleDateFormat.parse(command.getData());
+                if(databaseService.editarConta(command.getLancamento(),command.getDescricao(),principal.getName(),command.getTotal(),date,command.getPago())){
+                    model.addAttribute("type","info");
+                    model.addAttribute("message","Salvo com sucesso!");
+                    model.addAttribute("post",command);
+                }else{
+                    model.addAttribute("type","error");
+                    model.addAttribute("message","Erro ao salvar!");
+                }
             }else{
-                model.addAttribute("type","error");
-                model.addAttribute("message","Erro ao salvar!");
+                Date date = simpleDateFormat.parse(command.getData());
+                if(databaseService.addConta(command.getLancamento(),command.getDescricao(),principal.getName(),command.getTotal(),date,command.getPago())){
+                    model.addAttribute("type","info");
+                    model.addAttribute("message","Salvo com sucesso!");
+                    model.addAttribute("post",command);
+                }else{
+                    model.addAttribute("type","error");
+                    model.addAttribute("message","Erro ao salvar!");
+                }
             }
+
         }catch (Exception ex){
             model.addAttribute("type","error");
             model.addAttribute("message",ex.getMessage());
