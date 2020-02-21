@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="/layout/header :: common_header(~{::title},~{::link})">
+<head th:replace="layout/header :: common_header(~{::title},~{::link})">
 
     <title>Listar Contas</title>
     <link rel="stylesheet" type="text/css" th:href="@{/static/css/hello.css}">
     <link/>
 
 </head>
-<body th:replace="/layout/body :: common_body(~{::conteudo},~{::script})">
-<div th:replace="/layout/menu"></div>
+<body th:replace="layout/body :: common_body(~{::conteudo},~{::script})">
 <div th:fragment="conteudo">
-    <div th:replace="/layout/menu"/>
-
+    <div th:replace="layout/menu"></div>
     <div class="container">
         <h1>Listar contas</h1>
         <div class="tabela">

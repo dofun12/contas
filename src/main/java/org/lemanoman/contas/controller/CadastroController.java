@@ -5,20 +5,26 @@ import org.lemanoman.contas.dto.CadastroForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/public/cadastro")
 public class CadastroController {
 
 
     @Autowired
     private DatabaseService databaseService;
 
+    @GetMapping("/cadastro")
+    public String cadastro(
+            @ModelAttribute("command") CadastroForm command,
+            Model model ) {
+        return "cadastro";
+    }
 
-    @PostMapping("/postCadastro")
+    @PostMapping("/cadastro")
     public String foobarPost(
             @ModelAttribute("command") CadastroForm command,
             Model model ) {
@@ -26,13 +32,13 @@ public class CadastroController {
 
             if(databaseService.createUser(command.getUsuario(),command.getNome(),command.getSenha())){
                 model.addAttribute("type","info");
-                model.addAttribute("message","Salvo com sucesso!");
+                model.addAttribute("message","Login criado com sucesso!");
             }else{
                 model.addAttribute("type","error");
-                model.addAttribute("message","Erro ao salvar!");
+                model.addAttribute("message","Erro ao criar o login!");
             }
 
 
-            return "cadastro";
+            return "login";
     }
 }

@@ -49,7 +49,7 @@ public class ContasController {
         model.addAttribute("contas", contas);
         model.addAttribute("total", total);
         model.addAttribute("name", userModel.getNome());
-        return "/contas/listar";
+        return "contas/listar";
     }
 
     @GetMapping("/contas/listar/{ano}/{mes}")
@@ -67,7 +67,7 @@ public class ContasController {
         novaContaForm.setEditar(false);
         novaContaForm.setPago(false);
         model.addAttribute("post", novaContaForm);
-        return "/contas/editar";
+        return "contas/editar";
     }
 
     private String doEdit(String lancamento, Integer ano, Integer mes, Integer dia, Model model, Principal principal) {
@@ -100,7 +100,7 @@ public class ContasController {
             novaContaForm.setData(simpleDateFormat.format(calendar.getTime()));
             novaContaForm.setPago(conta.getPago());
             model.addAttribute("post", novaContaForm);
-            return "/contas/editar";
+            return "contas/editar";
         } else {
             return "";
         }
@@ -187,7 +187,7 @@ public class ContasController {
             ex.printStackTrace();
         }
         model.addAttribute("post", command);
-        return "/contas/editar";
+        return "contas/editar";
     }
 
 

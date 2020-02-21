@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="/layout/header :: common_header(~{::title},~{::link})">
+<head th:replace="layout/header :: common_header(~{::title},~{::link})">
 
     <title>Nova Conta</title>
     <link rel="stylesheet" type="text/css" th:href="@{/static/css/hello.css}">
     <link/>
 
 </head>
-<body th:replace="/layout/body :: common_body(~{::conteudo},~{::script})">
-<div th:replace="/layout/menu"></div>
+<body th:replace="layout/body :: common_body(~{::conteudo},~{::script})">
 <div th:fragment="conteudo">
-
-
-    <div th:replace="/layout/menu"/>
+    <div th:replace="layout/menu"></div>
 
     <div class="alert alert-info" th:if="${type!=null && type.equals('info')}" th:text="${message}"></div>
     <div class="alert alert-error" th:if="${type!=null && type.equals('error')}" th:text="${message}"></div>

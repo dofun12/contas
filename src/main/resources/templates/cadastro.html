@@ -8,9 +8,9 @@
 </head>
 <body th:replace="layout/body :: common_body(~{::conteudo},~{::script})">
 <div class="container" th:fragment="conteudo">
-    <div class="alert alert-info" th:if="${type!=null && type.equals('info')}" th:text="${message}"></div>
-    <div class="alert alert-error" th:if="${type!=null && type.equals('error')}" th:text="${message}"></div>
-    <form id="cadastro-form" action="#" method="post" th:action="@{/public/cadastro/postCadastro}">
+
+    <h1> Cadastro </h1>
+    <form id="cadastro-form" action="#" method="post" th:action="@{/cadastro}">
         <div class="form-group">
             <label> Usuario : </label>
             <input class="form-control" autocomplete="off" type="text" name="usuario"/>
@@ -25,16 +25,23 @@
         </div>
         <div class="form-group">
             <label> Confirmar Senha: </label>
-            <input class="form-control"  autocomplete="off" type="password" name="senha2"/>
+            <input class="form-control" autocomplete="off" type="password" name="senha2"/>
         </div>
-        <div class="float-lg-right">
-            <input type="submit" class="btn btn-primary" value="Sign In"/>
+        <div class="row">
+            <div class="col-6">
+                <a class="btn btn-secondary float-left" style="color:white;" th:href="@{/login}">Voltar para Login</a>
+            </div>
+            <div class="col-6">
+                <input type="submit" class="btn btn-primary float-right" value="Salvar"/>
+            </div>
         </div>
     </form>
+    <div class="alert alert-info" th:if="${type!=null && type.equals('info')}" th:text="${message}"></div>
+    <div class="alert alert-error" th:if="${type!=null && type.equals('error')}" th:text="${message}"></div>
 
 </div>
 <script type="text/javascript">
-    $( '#cadastro-form' ).each(function(){
+    $('#cadastro-form').each(function () {
         this.reset();
     });
     document.getElementById("cadastro-form").setAttribute("autocomplete", "off");
