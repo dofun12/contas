@@ -1,0 +1,78 @@
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header :: common_header(~{::title},~{::link})">
+
+    <title>Sobre o Sistema</title>
+    <link/>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/css/sobre.css}">
+</head>
+<body th:replace="layout/body :: common_body(~{::conteudo},~{::script})">
+<div th:fragment="conteudo">
+    <div th:replace="layout/menu"></div>
+    <div class="container">
+        <div class="row">
+            <h1 class="col-12">Software: </h1>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <ul>
+                    <li>Sistema: Debian Tinkerboard (Linux)</li>
+                    <li>Backend: Java 8, Springboot e SQLite</li>
+                    <li>Frontend: JQuery, Bootstrap 4, JQuery UI</li>
+                    <li>Código fonte: <a href="https://github.com/dofun12/contas">Github</a></li>
+                    <li>Criado por Kevim Such - 2020</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <h1 class="col-12">Hardware: Tinker R/BR</h1>
+        </div>
+        <div class="row">
+            <div class="col-12 ">
+                <img src="/static/image/IMG_20200220_230440255.jpg" style="width: 100%;max-width: 600px;">
+            </div>
+            <div class="col-12 ">
+                <div id="specifications" class="" style="display: block;">
+                    <div id="spec-area" class="row">
+                        <ul class="product-spec">
+                            <li><span class="spec-item">Processador(es)</span>
+                                <div class="spec-data">Processador Rockchip Quad-Core RK3288 (ARM-v7) 32bits</div>
+                            </li>
+                            <li><span class="spec-item">Memória</span>
+                                <div class="spec-data">2GB Dual Channel DDR3</div>
+                            </li>
+                            <li><span class="spec-item">Gráfico</span>
+                                <div class="spec-data">Processador Gráfico Integrado <br><br></div>
+                            </li>
+                            <li><span class="spec-item">Armazenamento</span>
+                                <div class="spec-data">Micro SD(TF) card slot</div>
+                            </li>
+                            <li><span class="spec-item">LAN</span>
+                                <div class="spec-data">RTL GB LAN</div>
+                            </li>
+                            <li><span class="spec-item">Rede de dados sem fio</span>
+                                <div class="spec-data">802.11 b/g/n, Bluetooth V4.0 + EDR</div>
+                            </li>
+                            <li><span class="spec-item">Áudio</span>
+                                <div class="spec-data">RTL ALC4040 CODEC</div>
+                            </li>
+                            <li><span class="spec-item">Portas USB</span>
+                                <div class="spec-data">4 x USB 2.0</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>
+<script type="text/javascript">
+
+</script>
+
+
+</body>
+</html>

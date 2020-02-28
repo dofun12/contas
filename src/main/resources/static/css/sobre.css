@@ -1,0 +1,11 @@
+.tabela-coluna{
+    padding: 10px;
+    border-left: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+.tabela-header{
+    padding: 10px;
+    background-color: #0f6674;
+    color: white;
+    border-left: 1px solid white;
+}
