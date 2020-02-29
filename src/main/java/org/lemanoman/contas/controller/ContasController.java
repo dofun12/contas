@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -45,11 +47,23 @@ public class ContasController {
         Double total = 0d;
         for (Conta conta : contas) {
             total = total + conta.getTotal();
+            conta.setTotalFormatado("R$ "+formatPrice(conta.getTotal()));
         }
         model.addAttribute("contas", contas);
-        model.addAttribute("total", total);
+
+        model.addAttribute("total", "R$ "+formatPrice(total));
         model.addAttribute("name", userModel.getNome());
         return "contas/listar";
+    }
+
+    public static String formatPrice(double value) {
+        DecimalFormat formatter;
+        if (value<=99999)
+            formatter = new DecimalFormat("###,###,##0.00");
+        else
+            formatter = new DecimalFormat("#,##,##,###.00");
+
+        return formatter.format(value);
     }
 
     @GetMapping("/contas/listar/{ano}/{mes}")

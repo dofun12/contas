@@ -10,6 +10,7 @@ public class Conta {
     private Integer dia;
     private Double total;
     private Boolean pago;
+    private String totalFormatado;
     private String descricao;
 
     public Conta() {
@@ -98,5 +99,13 @@ public class Conta {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public String getTotalFormatado() {
+        return totalFormatado;
+    }
+
+    public void setTotalFormatado(String totalFormatado) {
+        this.totalFormatado = totalFormatado;
     }
 }

@@ -1,0 +1,38 @@
+.tabela-coluna{
+    padding: 10px;
+    border-top: 1px solid #eee;
+    word-break: break-all;
+}
+.tabela-header{
+    padding: 10px;
+    background-color: #0f6674;
+    color: white;
+    border-left: 1px solid white;
+}
+.header{
+    font-weight: bold;
+    font-size: 0.6em;
+    color: #666;
+}
+.valor{
+    color: #000;
+    font-size: 1.3em;
+}
+.tabela-linha{
+    margin-top: 15px;
+}
+.even{
+    /*background-color: #efefef;*/
+}
+.fa-check{
+    /**font-size: 30px;**/
+    color: greenyellow;
+}
+
+.fa-times{
+    /**font-size: 30px;**/
+    color: orangered;
+}
+.tabela-linha a{
+    font-size: 1.3em;
+}

@@ -3,7 +3,7 @@
 <head th:replace="layout/header :: common_header(~{::title},~{::link})">
 
     <title>Listar Contas</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/static/css/hello.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/css/contas-listar.css}">
     <link/>
 
 </head>
@@ -13,37 +13,59 @@
     <div class="container">
         <h1>Listar contas</h1>
         <div class="tabela">
-            <div class="row" style="border-bottom: 1px solid #eee;font-weight: bold;">
-                <div class="col tabela-header">Lancamento</div>
-                <div class="col tabela-header">Total</div>
-                <div class="col tabela-header">Dia</div>
-                <div class="col tabela-header">Pago</div>
-                <div class="col tabela-header">Ações</div>
-            </div>
+            <th:block th:each="conta,iter : ${contas}">
+                <div class="row tabela-linha" th:classappend="${iter.even} ? even: odd">
+                    <div class="col-2 tabela-coluna">
+                        <div class="row">
+                            <span class="col-12 header">Id lanc:</span>
+                            <!--/*@thymesVar id="conta" type="org.lemanoman.contas.dto.Conta"*/-->
+                            <span class="col-12 valor" th:text="${conta.lancamento}"></span>
+                        </div>
+                    </div>
+                    <div class="col-2 tabela-coluna">
+                        <div class="row">
+                            <span class="col-12 header">Descricão:</span>
+                            <!--/*@thymesVar id="conta" type="org.lemanoman.contas.dto.Conta"*/-->
+                            <span class="col-12 valor" th:text="${conta.descricao}"></span>
+                        </div>
+                    </div>
+                    <div class="col-2 tabela-coluna">
+                        <div class="row">
+                            <span  class="col-12 header">Total</span>
+                            <!--/*@thymesVar id="conta" type="org.lemanoman.contas.dto.Conta"*/-->
+                            <span  class="col-12 valor" th:text="${conta.totalFormatado}"></span>
+                        </div>
+                    </div>
+                    <div class="col-2 tabela-coluna">
+                        <div class="row">
+                            <span class="col-12 header">Dia</span>
+                            <!--/*@thymesVar id="conta" type="org.lemanoman.contas.dto.Conta"*/-->
+                            <span class="col-12 valor" th:text="${conta.dia}"></span>
+                        </div>
+                    </div>
+                    <div class="col-2 tabela-coluna">
+                        <div class="row">
+                            <span class="col-12 header">Pago</span>
+                            <!--/*@thymesVar id="conta" type="org.lemanoman.contas.dto.Conta"*/-->
 
-            <th:block th:each="conta : ${contas}">
-                <div class="row">
-                    <div class="col tabela-coluna">
-                        <!--/*@thymesVar id="conta" type="org.lemanoman.contas.dto.Conta"*/-->
-                    <span th:text="${conta.lancamento}"></span></div>
-                    <div class="col tabela-coluna">
-                        <!--/*@thymesVar id="conta" type="org.lemanoman.contas.dto.Conta"*/-->
-                    <span th:text="${conta.total}"></span></div>
+                            <span class="col-12 valor">
+                                <i class="fas fa-check"  th:if="${conta.pago}"></i>
+                                <i class="fas fa-times" th:if="${!conta.pago}"></i>
+                            </span>
+                        </div>
+                    </div>
                     <!--/*@thymesVar id="conta" type="org.lemanoman.contas.dto.Conta"*/-->
-                    <div class="col tabela-coluna"><span th:text="${conta.dia}"></span></div>
-                    <!--/*@thymesVar id="conta" type="org.lemanoman.contas.dto.Conta"*/-->
-                    <div class="col tabela-coluna"><span th:text="${conta.pago}"></span></div>
-                    <!--/*@thymesVar id="conta" type="org.lemanoman.contas.dto.Conta"*/-->
-                    <div class="col tabela-coluna">
-                        <a th:href="${'/contas/editar/'+conta.getLancamento()+'/'+conta.getAno()+'/'+conta.getMes()+'/'+conta.getDia()}">Editar</a>
-                        <a th:href="${'/contas/deletar/'+conta.getLancamento()+'/'+conta.getAno()+'/'+conta.getMes()+'/'+conta.getDia()}">Deletar</a>
+                    <div class="col-2 tabela-coluna">
+                        <a th:href="${'/contas/editar/'+conta.getLancamento()+'/'+conta.getAno()+'/'+conta.getMes()+'/'+conta.getDia()}"><i class="fas fa-edit"></i></a>
+                        <a th:href="${'/contas/deletar/'+conta.getLancamento()+'/'+conta.getAno()+'/'+conta.getMes()+'/'+conta.getDia()}"><i class="fas fa-trash"></i></a>
                     </div>
                 </div>
             </th:block>
 
             <div class="row">
                 <div class="col" style="text-align: right;">
-                    <span style="font-weight: bold;">Total: <span th:text="${total}"></span></span>
+                    <span style="font-weight: bold;font-size: 1.6em;margin-top: 15px;display: block;font-family: sans-serif;">Total: <span
+                            th:text="${total}"></span></span>
                 </div>
 
             </div>
