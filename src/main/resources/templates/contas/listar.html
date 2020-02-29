@@ -15,50 +15,47 @@
         <div class="tabela">
             <th:block th:each="conta,iter : ${contas}">
                 <div class="row tabela-linha" th:classappend="${iter.even} ? even: odd">
-                    <div class="col-2 tabela-coluna">
-                        <div class="row">
-                            <span class="col-12 header">Id lanc:</span>
-                            <!--/*@thymesVar id="conta" type="org.lemanoman.contas.dto.Conta"*/-->
-                            <span class="col-12 valor" th:text="${conta.lancamento}"></span>
-                        </div>
+                    <div class="col-8 tabela-coluna" style="background-color: #eee;font-size: 0.8em;padding: 5px;font-weight: bold;">
+                         <span class="valor" th:text="${conta.lancamento}" style="color: #333;"></span>
                     </div>
-                    <div class="col-2 tabela-coluna">
+                    <div class="col-4 tabela-coluna" style="background-color: #eee;text-align: right;padding: 5px;">
+                        <a th:href="${'/contas/editar/'+conta.getLancamento()+'/'+conta.getAno()+'/'+conta.getMes()+'/'+conta.getDia()}"><i class="fas fa-edit"></i></a>
+                        <a th:href="${'/contas/deletar/'+conta.getLancamento()+'/'+conta.getAno()+'/'+conta.getMes()+'/'+conta.getDia()}"><i class="fas fa-trash"></i></a>
+                    </div>
+                    <div class="col-4 tabela-coluna">
                         <div class="row">
                             <span class="col-12 header">Descricão:</span>
                             <!--/*@thymesVar id="conta" type="org.lemanoman.contas.dto.Conta"*/-->
                             <span class="col-12 valor" th:text="${conta.descricao}"></span>
                         </div>
                     </div>
-                    <div class="col-2 tabela-coluna">
+                    <div class="col-4 tabela-coluna">
                         <div class="row">
                             <span  class="col-12 header">Total</span>
                             <!--/*@thymesVar id="conta" type="org.lemanoman.contas.dto.Conta"*/-->
                             <span  class="col-12 valor" th:text="${conta.totalFormatado}"></span>
                         </div>
                     </div>
-                    <div class="col-2 tabela-coluna">
+                    <div class="col-3 tabela-coluna">
                         <div class="row">
                             <span class="col-12 header">Dia</span>
                             <!--/*@thymesVar id="conta" type="org.lemanoman.contas.dto.Conta"*/-->
                             <span class="col-12 valor" th:text="${conta.dia}"></span>
                         </div>
                     </div>
-                    <div class="col-2 tabela-coluna">
+                    <div class="col-1 tabela-coluna">
                         <div class="row">
-                            <span class="col-12 header">Pago</span>
+                            <span class="col-12 header" >Pago</span>
                             <!--/*@thymesVar id="conta" type="org.lemanoman.contas.dto.Conta"*/-->
 
                             <span class="col-12 valor">
-                                <i class="fas fa-check"  th:if="${conta.pago}"></i>
+                                <i class="fas fa-check"   th:if="${conta.pago}"></i>
                                 <i class="fas fa-times" th:if="${!conta.pago}"></i>
                             </span>
                         </div>
                     </div>
                     <!--/*@thymesVar id="conta" type="org.lemanoman.contas.dto.Conta"*/-->
-                    <div class="col-2 tabela-coluna">
-                        <a th:href="${'/contas/editar/'+conta.getLancamento()+'/'+conta.getAno()+'/'+conta.getMes()+'/'+conta.getDia()}"><i class="fas fa-edit"></i></a>
-                        <a th:href="${'/contas/deletar/'+conta.getLancamento()+'/'+conta.getAno()+'/'+conta.getMes()+'/'+conta.getDia()}"><i class="fas fa-trash"></i></a>
-                    </div>
+
                 </div>
             </th:block>
 

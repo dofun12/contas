@@ -20,6 +20,7 @@
 }
 .tabela-linha{
     margin-top: 15px;
+    border: 1px solid #eee;
 }
 .even{
     /*background-color: #efefef;*/
