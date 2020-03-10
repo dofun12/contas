@@ -1,10 +1,7 @@
 package org.lemanoman.contas.controller;
 
-import org.lemanoman.contas.dto.Conta;
-import org.lemanoman.contas.dto.TimePeriod;
+import org.lemanoman.contas.dto.*;
 import org.lemanoman.contas.service.DatabaseService;
-import org.lemanoman.contas.dto.NovaContaForm;
-import org.lemanoman.contas.dto.UserModel;
 import org.lemanoman.contas.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -22,6 +19,7 @@ import java.security.Principal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +34,7 @@ public class ContasController {
 
     @GetMapping("/contas/listar")
     public String listar(Model model, Principal principal) {
+        model.addAttribute("meses",getMeses(null));
         return listar(model,principal, null);
     }
 
@@ -50,7 +49,6 @@ public class ContasController {
             conta.setTotalFormatado("R$ "+formatPrice(conta.getTotal()));
         }
         model.addAttribute("contas", contas);
-
         model.addAttribute("total", "R$ "+formatPrice(total));
         model.addAttribute("name", userModel.getNome());
         return "contas/listar";
@@ -71,6 +69,7 @@ public class ContasController {
             @PathVariable("ano") Integer ano,
             @PathVariable("mes") Integer mes,Model model, Principal principal) {
         List<Conta> contas = databaseService.getListContas(principal.getName(),ano,mes);
+        model.addAttribute("meses",getMeses(mes));
         return listar(model,principal,contas);
     }
 
@@ -161,6 +160,27 @@ public class ContasController {
 
     }
 
+    private List<Mes> getMeses(Integer mesAtual){
+        Calendar calendar = Calendar.getInstance();
+        if(mesAtual==null){
+            mesAtual = calendar.get(Calendar.MONTH);
+        }
+
+        int minMonth = calendar.getActualMinimum(Calendar.MONTH);
+        int maxMonth = calendar.getActualMaximum(Calendar.MONTH);
+        calendar.set(Calendar.MONTH, minMonth);
+
+        SimpleDateFormat monthNameFormat = new SimpleDateFormat("MMMM");
+        List<Mes> meses = new ArrayList<>();
+        int i = minMonth;
+        while (i<maxMonth){
+            meses.add(new Mes(i+1,monthNameFormat.format(calendar.getTime()),mesAtual.equals(i)));
+            calendar.add(Calendar.MONTH,1);
+            i++;
+        }
+        return meses;
+    }
+
     private void addError(Model model) {
         addMessage("Erro ao salvar!", "error", model);
     }
@@ -176,6 +196,35 @@ public class ContasController {
 
     @PostMapping("/contas/nova")
     public String postNovaConta(@ModelAttribute("command") NovaContaForm command, Model model, Principal principal) {
+        try {
+            TimePeriod tp = TimeUtils.toTimePeriod(command.getData());
+            Date date = simpleDateFormat.parse(command.getData());
+            if (tp != null && databaseService.getConta(principal.getName(), command.getLancamento(), tp.getAno(), tp.getMes()) != null) {
+                if (databaseService.editarConta(command.getLancamento(), command.getDescricao(), principal.getName(), command.getTotal(), date, command.getPago())) {
+                    addSucesso(model);
+                    model.addAttribute("post", command);
+                } else {
+                    addError(model);
+                }
+            } else {
+                if (databaseService.addConta(command.getLancamento(), command.getDescricao(), principal.getName(), command.getTotal(), date, command.getPago())) {
+                    addSucesso(model);
+                    model.addAttribute("post", command);
+                } else {
+                    addError(model);
+                }
+            }
+
+        } catch (Exception ex) {
+            model.addAttribute("type", "error");
+            model.addAttribute("message", ex.getMessage());
+            ex.printStackTrace();
+        }
+        model.addAttribute("post", command);
+        return "contas/editar";
+    }
+    @PostMapping("/contas/copiarMesPassado")
+    public String copiarMesPassado(@ModelAttribute("command") NovaContaForm command, Model model, Principal principal) {
         try {
             TimePeriod tp = TimeUtils.toTimePeriod(command.getData());
             Date date = simpleDateFormat.parse(command.getData());

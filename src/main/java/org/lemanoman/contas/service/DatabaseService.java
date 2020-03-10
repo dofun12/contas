@@ -29,6 +29,20 @@ public class DatabaseService {
         }
     }
 
+    public List<String> getListAnos() {
+        UserModel userModel = new UserModel();
+        Database database = new Database(dataBaseLocation);
+        List<Map<String, Object>> list = database.doSelect("select ano as anos from conta group by ano");
+        List<String> listAnos = new ArrayList<>();
+        if (list != null && list.size() > 0) {
+            for(Map<String,Object> map: list){
+                listAnos.add(map.get("anos").toString());
+            }
+        }
+        database.close();
+        return listAnos;
+    }
+
 
     public UserModel getUsuario(String usuario) {
         UserModel userModel = new UserModel();
