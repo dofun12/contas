@@ -18,6 +18,12 @@
     color: #000;
     font-size: 1.3em;
 }
+.delay-warning{
+    color: orange;
+}
+.delay-danger{
+    color: #b21f2d;
+}
 .row-footer div{
     padding: 0;
 }

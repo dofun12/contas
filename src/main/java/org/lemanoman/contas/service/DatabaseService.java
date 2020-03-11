@@ -70,7 +70,7 @@ public class DatabaseService {
                 "select * from conta \n" +
                         " where " +
                         " usuario = '" + usuario + "' \n" +
-                        " and mes = " + (calendar.get(Calendar.MONTH) + 1) + " and ano = " + calendar.get(Calendar.YEAR));
+                        " and mes = " + (calendar.get(Calendar.MONTH) + 1) + " and ano = " + calendar.get(Calendar.YEAR)+ " order by dia");
         if (list != null && list.size() > 0) {
             for (Map<String, Object> map : list) {
                 listConta.add(new Conta(map));
@@ -88,7 +88,7 @@ public class DatabaseService {
                 "select * from conta \n" +
                         " where " +
                         " usuario = '" + usuario + "' \n" +
-                        " and mes = " + mes + " and ano = " + ano);
+                        " and mes = " + mes + " and ano = " + ano+  " order by dia");
         if (list != null && list.size() > 0) {
             for (Map<String, Object> map : list) {
                 listConta.add(new Conta(map));

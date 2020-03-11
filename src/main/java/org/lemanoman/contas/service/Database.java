@@ -8,10 +8,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Database {
     private Connection connection = null;
@@ -26,7 +23,7 @@ public class Database {
 
     public List<Map<String, Object>> doSelect(String query){
         System.out.println("Doing select: "+query);
-        List<Map<String, Object>> list = new ArrayList<>();
+        LinkedList<Map<String, Object>> list = new LinkedList<>();
         try {
 
             Statement statement = getConnection().createStatement();
