@@ -34,6 +34,7 @@ public class ContasController {
 
     @GetMapping("/contas/listar")
     public String listar(Model model, Principal principal) {
+        model.addAttribute("anos", getAnos(null));
         model.addAttribute("meses",getMeses(null));
         return listar(model,principal, null);
     }
@@ -69,6 +70,7 @@ public class ContasController {
             @PathVariable("ano") Integer ano,
             @PathVariable("mes") Integer mes,Model model, Principal principal) {
         List<Conta> contas = databaseService.getListContas(principal.getName(),ano,mes);
+        model.addAttribute("anos", getAnos(ano));
         model.addAttribute("meses",getMeses(mes));
         return listar(model,principal,contas);
     }
@@ -160,10 +162,29 @@ public class ContasController {
 
     }
 
+    private List<Ano> getAnos(Integer ano){
+        List<Ano> anos = new ArrayList<>();
+        Integer anoAtual = ano;
+        if(anoAtual==null){
+            anoAtual = Calendar.getInstance().get(Calendar.YEAR);
+        }
+        anos.add(new Ano(anoAtual,true));
+
+        for(Integer anoDB:databaseService.getListAnos()){
+            if(!anoDB.equals(anoAtual)){
+                anos.add(new Ano(anoDB,false));
+            }
+
+        }
+        return anos;
+    }
+
     private List<Mes> getMeses(Integer mesAtual){
         Calendar calendar = Calendar.getInstance();
         if(mesAtual==null){
-            mesAtual = calendar.get(Calendar.MONTH);
+            mesAtual = (calendar.get(Calendar.MONTH));
+        }else{
+            mesAtual = mesAtual-1;
         }
 
         int minMonth = calendar.getActualMinimum(Calendar.MONTH);
@@ -173,7 +194,7 @@ public class ContasController {
         SimpleDateFormat monthNameFormat = new SimpleDateFormat("MMMM");
         List<Mes> meses = new ArrayList<>();
         int i = minMonth;
-        while (i<maxMonth){
+        while (i<=maxMonth){
             meses.add(new Mes(i+1,monthNameFormat.format(calendar.getTime()),mesAtual.equals(i)));
             calendar.add(Calendar.MONTH,1);
             i++;
@@ -223,34 +244,19 @@ public class ContasController {
         model.addAttribute("post", command);
         return "contas/editar";
     }
-    @PostMapping("/contas/copiarMesPassado")
-    public String copiarMesPassado(@ModelAttribute("command") NovaContaForm command, Model model, Principal principal) {
-        try {
-            TimePeriod tp = TimeUtils.toTimePeriod(command.getData());
-            Date date = simpleDateFormat.parse(command.getData());
-            if (tp != null && databaseService.getConta(principal.getName(), command.getLancamento(), tp.getAno(), tp.getMes()) != null) {
-                if (databaseService.editarConta(command.getLancamento(), command.getDescricao(), principal.getName(), command.getTotal(), date, command.getPago())) {
-                    addSucesso(model);
-                    model.addAttribute("post", command);
-                } else {
-                    addError(model);
-                }
-            } else {
-                if (databaseService.addConta(command.getLancamento(), command.getDescricao(), principal.getName(), command.getTotal(), date, command.getPago())) {
-                    addSucesso(model);
-                    model.addAttribute("post", command);
-                } else {
-                    addError(model);
-                }
-            }
 
+    @PostMapping("/contas/copiarProximoMes")
+    public String copiarProximoMes(@ModelAttribute("command")CopiarForm copiarForm, Model model, Principal principal) {
+        try {
+            copiarForm.getAno();
+            copiarForm.getMes();
+            databaseService.copyFromTo(principal.getName(),copiarForm.getMes(),copiarForm.getAno(),principal.getName(),copiarForm.getMes()+1,copiarForm.getAno());
         } catch (Exception ex) {
-            model.addAttribute("type", "error");
-            model.addAttribute("message", ex.getMessage());
-            ex.printStackTrace();
         }
-        model.addAttribute("post", command);
-        return "contas/editar";
+        List<Conta> contas = databaseService.getListContas(principal.getName(),copiarForm.getAno(),copiarForm.getMes());
+        model.addAttribute("anos", getAnos(copiarForm.getAno()));
+        model.addAttribute("meses",getMeses(copiarForm.getMes()));
+        return listar(model,principal,contas);
     }
 
 

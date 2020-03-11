@@ -29,14 +29,14 @@ public class DatabaseService {
         }
     }
 
-    public List<String> getListAnos() {
+    public List<Integer> getListAnos() {
         UserModel userModel = new UserModel();
         Database database = new Database(dataBaseLocation);
         List<Map<String, Object>> list = database.doSelect("select ano as anos from conta group by ano");
-        List<String> listAnos = new ArrayList<>();
+        List<Integer> listAnos = new ArrayList<>();
         if (list != null && list.size() > 0) {
             for(Map<String,Object> map: list){
-                listAnos.add(map.get("anos").toString());
+                listAnos.add((Integer) map.get("anos"));
             }
         }
         database.close();
@@ -128,6 +128,20 @@ public class DatabaseService {
         Database database = new Database(dataBaseLocation);
         try {
             database.doUpdate("insert into usuarios(usuario,nome,senha,dataCriado) values ('" + usuario + "','" + nome + "','" + senha + "',DATETIME('now'))");
+            database.close();
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            database.close();
+            return false;
+        }
+    }
+
+    public boolean copyFromTo(String fromUsuario,Integer fromMes, Integer fromAno, String toUsuario, Integer toMes, Integer toAno) {
+        Database database = new Database(dataBaseLocation);
+        try {
+            database.doUpdate("insert into conta (usuario, lancamento, mes, ano, dia, total, pago)" +
+                    " select '"+toUsuario+"' as usuario, lancamento, "+toMes+" as mes, "+toAno+" as ano, dia, total, 0 as pago from conta where ano = "+fromAno+" and mes = "+fromMes+" and usuario = '"+fromUsuario+"';");
             database.close();
             return true;
         } catch (Exception ex) {

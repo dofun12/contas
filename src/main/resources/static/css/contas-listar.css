@@ -18,6 +18,14 @@
     color: #000;
     font-size: 1.3em;
 }
+.row-footer div{
+    padding: 0;
+}
+.slct-monthyear{
+    float: right;
+    height: 45px;
+    padding: 10px;
+}
 .tabela-linha{
     margin-top: 15px;
     border: 1px solid #eee;

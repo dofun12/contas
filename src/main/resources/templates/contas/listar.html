@@ -13,18 +13,32 @@
     <div class="container">
         <div class="row">
             <div class="col-6"><h1>Listar contas</h1></div>
-            <div class="col-6"><select ><!--/*@thymesVar id="meses" type="java.util.List<Mes>"*/-->
-            <option th:each="mes,iter : ${meses}" th:value="${mes.codigo}" th:selected="${mes.selected}" th:text="${mes.nome}"></option></select></div>
+            <div class="col-6">
+                <select class="slct-monthyear" style="float:right;" id="slct-ano">
+                    <!--/*@thymesVar id="meses" type="java.util.List<Mes>"*/-->
+                    <option th:each="ano : ${anos}" th:value="${ano.ano}" th:selected="${ano.selected}"
+                            th:text="${ano.ano}"></option>
+                </select>
+                <select class="slct-monthyear" style="float:right;" id="slct-mes">
+                    <!--/*@thymesVar id="meses" type="java.util.List<Mes>"*/-->
+                    <option th:each="mes,iter : ${meses}" th:value="${mes.codigo}" th:selected="${mes.selected}"
+                            th:text="${mes.nome}"></option>
+                </select>
+            </div>
         </div>
         <div class="tabela">
             <th:block th:each="conta,iter : ${contas}">
                 <div class="row tabela-linha" th:classappend="${iter.even} ? even: odd">
-                    <div class="col-8 tabela-coluna" style="background-color: #eee;font-size: 0.8em;padding: 5px;font-weight: bold;">
-                        <span class="valor"  style="color: #333;margin-left: 5px;font-size: 0.9em;">ID :: <span  th:text="${conta.lancamento}"></span></span>
+                    <div class="col-8 tabela-coluna"
+                         style="background-color: #eee;font-size: 0.8em;padding: 5px;font-weight: bold;">
+                        <span class="valor" style="color: #333;margin-left: 5px;font-size: 0.9em;">ID :: <span
+                                th:text="${conta.lancamento}"></span></span>
                     </div>
                     <div class="col-4 tabela-coluna" style="background-color: #eee;text-align: right;padding: 5px;">
-                        <a th:href="${'/contas/editar/'+conta.getLancamento()+'/'+conta.getAno()+'/'+conta.getMes()+'/'+conta.getDia()}"><i class="fas fa-edit"></i></a>
-                        <a th:href="${'/contas/deletar/'+conta.getLancamento()+'/'+conta.getAno()+'/'+conta.getMes()+'/'+conta.getDia()}"><i class="fas fa-trash"></i></a>
+                        <a th:href="${'/contas/editar/'+conta.getLancamento()+'/'+conta.getAno()+'/'+conta.getMes()+'/'+conta.getDia()}"><i
+                                class="fas fa-edit"></i></a>
+                        <a th:href="${'/contas/deletar/'+conta.getLancamento()+'/'+conta.getAno()+'/'+conta.getMes()+'/'+conta.getDia()}"><i
+                                class="fas fa-trash"></i></a>
                     </div>
                     <div class="col-4 tabela-coluna">
                         <div class="row">
@@ -35,9 +49,9 @@
                     </div>
                     <div class="col-4 tabela-coluna">
                         <div class="row">
-                            <span  class="col-12 header">Total</span>
+                            <span class="col-12 header">Total</span>
                             <!--/*@thymesVar id="conta" type="org.lemanoman.contas.dto.Conta"*/-->
-                            <span  class="col-12 valor" th:text="${conta.totalFormatado}"></span>
+                            <span class="col-12 valor" th:text="${conta.totalFormatado}"></span>
                         </div>
                     </div>
                     <div class="col-2 tabela-coluna">
@@ -49,11 +63,11 @@
                     </div>
                     <div class="col-2 tabela-coluna">
                         <div class="row">
-                            <span class="col-12 header" >Pago</span>
+                            <span class="col-12 header">Pago</span>
                             <!--/*@thymesVar id="conta" type="org.lemanoman.contas.dto.Conta"*/-->
 
                             <span class="col-12 valor">
-                                <i class="fas fa-check"   th:if="${conta.pago}"></i>
+                                <i class="fas fa-check" th:if="${conta.pago}"></i>
                                 <i class="fas fa-times" th:if="${!conta.pago}"></i>
                             </span>
                         </div>
@@ -62,23 +76,38 @@
 
                 </div>
             </th:block>
-
-            <div class="row">
-                <div class="col" style="text-align: right;">
+        </div>
+        <div class="row row-footer">
+            <div class="col-6">
+                <button class="btn btn-primary">Copiar para o proximo mês</button>
+            </div>
+            <div class="col-6" style="text-align: right;">
                     <span style="font-weight: bold;font-size: 1.6em;margin-top: 15px;display: block;font-family: sans-serif;">Total: <span
                             th:text="${total}"></span></span>
-                </div>
-
             </div>
+
+
         </div>
+
     </div>
 
 
 </div>
 <script type="text/javascript">
-    $(document).ready(function () {
+    var origin = window.origin;
 
-    })    
+    function changeDate() {
+        window.location.href = origin + '/contas/listar/' + $('#slct-ano').val() + '/' + $('#slct-mes').val();
+    }
+
+    $(document).ready(function () {
+        $('#slct-mes').on('change', function (target) {
+            changeDate();
+        });
+        $('#slct-ano').on('change', function (target) {
+            changeDate();
+        })
+    });
 </script>
 </body>
 </html>
