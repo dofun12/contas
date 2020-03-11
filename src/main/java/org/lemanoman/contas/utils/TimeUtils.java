@@ -11,6 +11,14 @@ public class TimeUtils {
 
     public static final SimpleDateFormat YEAR_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
 
+    public static Date toDate(int dia,int mes,int ano){
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH,dia);
+        cal.set(Calendar.MONTH,mes-1);
+        cal.set(Calendar.YEAR,ano);
+        return cal.getTime();
+    }
+
     public static TimePeriod toTimePeriod(String dateStr){
         try{
             Date date = YEAR_FORMATTER.parse(dateStr);

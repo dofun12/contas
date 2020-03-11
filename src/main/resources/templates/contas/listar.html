@@ -79,7 +79,12 @@
         </div>
         <div class="row row-footer">
             <div class="col-6">
-                <button class="btn btn-primary">Copiar para o proximo mês</button>
+                <form action="#" method="post" th:action="@{/contas/copiarProximoMes}" >
+                    <input type="hidden" name="mes" id="fieldMes" value="" />
+                    <input type="hidden" name="ano" id="fieldAno" value="" />
+                    <input type="submit" class="btn btn-primary" value="Copiar para o proximo mês"></input>
+                </form>
+
             </div>
             <div class="col-6" style="text-align: right;">
                     <span style="font-weight: bold;font-size: 1.6em;margin-top: 15px;display: block;font-family: sans-serif;">Total: <span
@@ -97,10 +102,15 @@
     var origin = window.origin;
 
     function changeDate() {
+        $('#fieldAno').val($('#slct-ano').val());
+        $('#fieldMes').val($('#slct-mes').val());
         window.location.href = origin + '/contas/listar/' + $('#slct-ano').val() + '/' + $('#slct-mes').val();
     }
 
     $(document).ready(function () {
+        $('#fieldAno').val($('#slct-ano').val());
+        $('#fieldMes').val($('#slct-mes').val());
+
         $('#slct-mes').on('change', function (target) {
             changeDate();
         });

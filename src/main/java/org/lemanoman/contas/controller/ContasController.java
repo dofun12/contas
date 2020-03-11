@@ -132,6 +132,8 @@ public class ContasController {
             Principal principal) {
         databaseService.deleteConta(lancamento,principal.getName(),ano,mes,dia);
         List<Conta> contas = databaseService.getListContas(principal.getName(),ano,mes);
+        model.addAttribute("anos", getAnos(ano));
+        model.addAttribute("meses",getMeses(mes));
         return listar(model,principal, contas);
     }
 
@@ -250,8 +252,12 @@ public class ContasController {
         try {
             copiarForm.getAno();
             copiarForm.getMes();
-            databaseService.copyFromTo(principal.getName(),copiarForm.getMes(),copiarForm.getAno(),principal.getName(),copiarForm.getMes()+1,copiarForm.getAno());
+            List<Conta> contas = databaseService.getListContas(principal.getName(), copiarForm.getAno(),copiarForm.getMes());
+            for(Conta conta: contas){
+                databaseService.addConta(conta.getLancamento(),conta.getDescricao(),conta.getUsuario(),conta.getTotal(),TimeUtils.toDate(conta.getDia(),conta.getMes()+1,conta.getAno()),false);
+            }
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
         List<Conta> contas = databaseService.getListContas(principal.getName(),copiarForm.getAno(),copiarForm.getMes());
         model.addAttribute("anos", getAnos(copiarForm.getAno()));
