@@ -13,5 +13,6 @@ O mais legal desse projeto, é que voce só precisa instalar o JAVA e iniciar a 
 ### Após rodar, acesse:
  [http://localhost:8095](http://localhost:8095)
 
-O banco de dados será criado automáticamente.
+## Obs:
+O banco de dados será criado automáticamente,no mesmo diretório que vc executou o "java -jar".
 
