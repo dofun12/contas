@@ -45,7 +45,7 @@ public class DatabaseService {
 
 
     public UserModel getUsuario(String usuario) {
-        UserModel userModel = new UserModel();
+        UserModel userModel = null;
         Database database = new Database(dataBaseLocation);
         List<Map<String, Object>> list = database.doSelect("select usuario,nome,senha,dataCriado from usuarios where usuario = '" + usuario + "'");
         if (list != null && list.size() > 0) {
@@ -56,8 +56,8 @@ public class DatabaseService {
                     (String) map.get("nome"),
                     "ADMIN"
             );
+            database.close();
         }
-        database.close();
         return userModel;
     }
 

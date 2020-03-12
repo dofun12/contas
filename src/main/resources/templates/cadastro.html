@@ -13,26 +13,38 @@
     <form id="cadastro-form" action="#" method="post" th:action="@{/cadastro}">
         <div class="form-group">
             <label> Usuario : </label>
-            <input class="form-control" autocomplete="off" type="text" name="usuario"/>
+            <input class="form-control" autocomplete="off" type="text" id="input_user" name="usuario"/>
+            <div class="invalid-feedback" id="feedback_user">
+                Please choose a username.
+            </div>
         </div>
         <div class="form-group">
             <label> Nome : </label>
-            <input class="form-control" autocomplete="off" type="text" name="nome"/>
+            <input class="form-control" autocomplete="off" type="text" id="input_name" name="nome"/>
+            <div class="invalid-feedback" id="feedback_name">
+                Please choose a username.
+            </div>
         </div>
         <div class="form-group">
             <label> Senha: </label>
-            <input class="form-control" autocomplete="off" type="password" name="senha"/>
+            <input class="form-control" autocomplete="off" type="password" id="passwd_1" name="senha"/>
+            <div class="invalid-feedback" id="feedback_passwd1">
+                Please choose a username.
+            </div>
         </div>
         <div class="form-group">
             <label> Confirmar Senha: </label>
-            <input class="form-control" autocomplete="off" type="password" name="senha2"/>
+            <input class="form-control" autocomplete="off" type="password" id="passwd_2" name="senha2"/>
+            <div class="invalid-feedback" id="feedback_passwd2">
+                Please choose a username.
+            </div>
         </div>
         <div class="row">
             <div class="col-6">
                 <a class="btn btn-secondary float-left" style="color:white;" th:href="@{/login}">Voltar para Login</a>
             </div>
             <div class="col-6">
-                <input type="submit" class="btn btn-primary float-right" value="Salvar"/>
+                <input type="button" onclick="valid()" class="btn btn-primary float-right" value="Salvar"/>
             </div>
         </div>
     </form>
@@ -41,8 +53,97 @@
 
 </div>
 <script type="text/javascript">
-    $('#cadastro-form').each(function () {
-        this.reset();
+    function valid(){
+        console.log($('#input_name'));
+        var invalid = false;
+        if($('#input_user').val().length<4){
+            $('#feedback_name').text('Usuario Invalido, deve ter pelo menos 4 caracteres');
+            $('#input_user').addClass('is-invalid');
+            $('#input_user').removeClass('is-valid');
+            return;
+        }else{
+            $('#input_user').removeClass('is-invalid');
+            $('#input_user').addClass('is-valid');
+
+        }
+        if($('#input_user').val().length>=10){
+            $('#feedback_name').text('Usuario Invalido, deve ter no maximo 10 caracteres');
+            $('#input_user').addClass('is-invalid');
+            $('#input_user').removeClass('is-valid');
+            return;
+        }else{
+            $('#input_user').removeClass('is-invalid');
+            $('#input_user').addClass('is-valid');
+
+        }
+        $.ajax('/cadastro/verify/'+$('#input_user').val(),{
+            method: 'GET',
+            success: function(data){
+                var userExists = data;
+                if(userExists){
+                    $('#feedback_user').text('Usuario já existe');
+                    $('#input_user').addClass('is-invalid');
+                    $('#input_user').removeClass('is-valid');
+                    invalid = true;
+                }else{
+                    $('#input_user').removeClass('is-invalid');
+                    $('#input_user').addClass('is-valid');
+                }
+
+                if($('#input_name').val().length<4){
+                    $('#feedback_name').text('Nome Invalido, deve ter pelo menos 4 caracteres');
+                    $('#input_name').addClass('is-invalid');
+                    $('#input_name').removeClass('is-valid');
+                    invalid = true;
+                }else if($('#input_name').val().length>=20){
+                    $('#feedback_name').text('Nome Invalido, deve ter no maximo 20 caracteres');
+                    $('#input_name').addClass('is-invalid');
+                    $('#input_name').removeClass('is-valid');
+                    invalid = true;
+                }else {
+                    $('#input_name').removeClass('is-invalid');
+                    $('#input_name').addClass('is-valid');
+                }
+
+                if($('#passwd_1').val().length<6){
+                    $('#feedback_passwd1').text('O campo senha deve ter no minimo 6 caracteres');
+                    $('#passwd_1').addClass('is-invalid');
+                    $('#passwd_1').removeClass('is-valid');
+                    invalid = true;
+                } else if($('#passwd_1').val().length>=10){
+                    $('#feedback_passwd1').text('O campo senha deve ter no maximo 10 caracteres');
+                    $('#passwd_1').addClass('is-invalid');
+                    $('#passwd_1').removeClass('is-valid');
+                    invalid = true;
+                }
+                if(!($('#passwd_1').val() === $('#passwd_2').val())){
+                    $('#feedback_passwd2').text('Os campos de senha devem ser iguais');
+                    $('#passwd_2').addClass('is-invalid');
+                    $('#passwd_2').removeClass('is-valid');
+                    invalid = true;
+                }else{
+                    $('#passwd_1').addClass('is-valid');
+                    $('#passwd_1').removeClass('is-invalid');
+                    $('#passwd_2').addClass('is-valid');
+                    $('#passwd_2').removeClass('is-invalid');
+                }
+                if(!invalid){
+                    $('#cadastro-form').submit();
+                }
+            }
+        });
+
+
+    }
+
+    $(document).ready(function () {
+        $('.form-control').on('keypress',function () {
+          $(this).removeClass('is-valid');
+          $(this).removeClass('is-invalid');
+        });
+        $('#cadastro-form').each(function () {
+            this.reset();
+        });
     });
     document.getElementById("cadastro-form").setAttribute("autocomplete", "off");
     document.getElementById("cadastro-form").setAttribute("autocomplete", "off");

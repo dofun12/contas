@@ -58,7 +58,8 @@
                         <div class="row">
                             <span class="col-12 header">Dia</span>
                             <!--/*@thymesVar id="conta" type="org.lemanoman.contas.dto.Conta"*/-->
-                            <span class="col-12 valor span-dia" th:data-pago="${conta.pago}" th:text="${conta.dia}"></span>
+                            <span class="col-12 valor span-dia" th:data-pago="${conta.pago}"
+                                  th:text="${conta.dia}"></span>
                         </div>
                     </div>
                     <div class="col-2 tabela-coluna">
@@ -83,14 +84,19 @@
                             th:text="${total}"></span></span>
             </div>
             <div class="col-12">
-                <form action="#" method="post" th:action="@{/contas/copiarProximoMes}" >
-                    <input type="hidden" name="mes" id="fieldMes" value="" />
-                    <input type="hidden" name="ano" id="fieldAno" value="" />
-                    <input style="margin: 10px auto;display: block;" type="submit" class="btn btn-primary" value="Copiar para o proximo mês"></input>
+                <a class="btn btn-info" style="margin: 10px auto;display: block;max-width: 220px;" th:href="@{/contas/nova}">Nova Conta</a>
+            </div>
+            <div class="col-12">
+                <!--/*@thymesVar id="contas" type="java.util.ArrayList"*/-->
+                <form action="#" method="post" th:if="${contas != null and contas.size()>0}"
+                      th:action="@{/contas/copiarProximoMes}">
+                    <input type="hidden" name="mes" id="fieldMes" value=""/>
+                    <input type="hidden" name="ano" id="fieldAno" value=""/>
+                    <input style="margin: 10px auto;display: block;" type="submit" class="btn btn-primary"
+                           value="Copiar para o proximo mês"></input>
                 </form>
 
             </div>
-
 
 
         </div>
@@ -107,23 +113,23 @@
         $(this).removeClass('delay-warning');
 
         var month = Number($('#slct-mes').val());
-        var year =  Number($('#slct-ano').val());
+        var year = Number($('#slct-ano').val());
 
         $('.span-dia').each(function (index) {
             var pago = $(this).attr('data-pago');
             console.log('pago', !pago);
-            if(!(pago==='true')){
+            if (!(pago === 'true')) {
                 var dia = Number($(this).text());
-                var date = moment(new Date(year,(month-1),dia));
+                var date = moment(new Date(year, (month - 1), dia));
                 var today = new moment();
                 var diff = date.diff(today, 'days');
-                if(diff>1 && diff<7){
+                if (diff > 1 && diff < 7) {
                     $(this).addClass('delay-warning');
                 }
-                if(diff<1){
+                if (diff < 1) {
                     $(this).addClass('delay-danger');
                 }
-                console.log(today,date,diff);
+                console.log(today, date, diff);
             }
 
 
