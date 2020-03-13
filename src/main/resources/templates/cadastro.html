@@ -115,18 +115,20 @@
                     $('#passwd_1').addClass('is-invalid');
                     $('#passwd_1').removeClass('is-valid');
                     invalid = true;
-                }
-                if(!($('#passwd_1').val() === $('#passwd_2').val())){
-                    $('#feedback_passwd2').text('Os campos de senha devem ser iguais');
-                    $('#passwd_2').addClass('is-invalid');
-                    $('#passwd_2').removeClass('is-valid');
-                    invalid = true;
                 }else{
-                    $('#passwd_1').addClass('is-valid');
-                    $('#passwd_1').removeClass('is-invalid');
-                    $('#passwd_2').addClass('is-valid');
-                    $('#passwd_2').removeClass('is-invalid');
+                    if(!($('#passwd_1').val() === $('#passwd_2').val())){
+                        $('#feedback_passwd2').text('Os campos de senha devem ser iguais');
+                        $('#passwd_2').addClass('is-invalid');
+                        $('#passwd_2').removeClass('is-valid');
+                        invalid = true;
+                    }else{
+                        $('#passwd_1').addClass('is-valid');
+                        $('#passwd_1').removeClass('is-invalid');
+                        $('#passwd_2').addClass('is-valid');
+                        $('#passwd_2').removeClass('is-invalid');
+                    }
                 }
+
                 if(!invalid){
                     $('#cadastro-form').submit();
                 }
